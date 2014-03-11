@@ -20,9 +20,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.pentaho.di.core.Const;
+import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.ui.core.PropsUI;
 
 import plugin.bg.sparebits.pdi.jira.JiraConnection;
+import plugin.bg.sparebits.pdi.jira.JiraPluginException;
 import plugin.bg.sparebits.pdi.jira.JiraPluginMeta;
 
 
@@ -31,6 +33,8 @@ import plugin.bg.sparebits.pdi.jira.JiraPluginMeta;
  * @author Neyko Neykov, 2009
  */
 public class ConnectionTab extends Composite {
+
+    private static Class<?> PKG = ConnectionTab.class;
 
     private PropsUI props = PropsUI.getInstance();
     private JiraPluginMeta meta;
@@ -153,20 +157,24 @@ public class ConnectionTab extends Composite {
      */
     private void createTestButton(Composite parent, Control up) {
         Button b = new Button(parent, SWT.CENTER);
-        b.setText(Messages.getString("Jira.Button.Test"));
+        b.setText(BaseMessages.getString(PKG, "Jira.Button.Test"));
         b.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent evt) {
+                MessageBox msgBox = null;
                 try {
                     JiraConnection connection = new JiraConnection(new URL(urlField.getText()),
                             usernameField.getText(), passwordField.getText());
                     connection.connect();
-                    connection.get("/");
-                    MessageBox msgBox = new MessageBox(getShell(), SWT.ICON_INFORMATION | SWT.OK);
-                    msgBox.setMessage(Messages.getString("Jira.Message.Success"));
-                    msgBox.open();
+                    connection.get("/application-properties");
+                    msgBox = new MessageBox(getShell(), SWT.ICON_INFORMATION | SWT.OK);
+                    msgBox.setMessage(BaseMessages.getString(PKG, "Jira.Message.Success"));
+                } catch (JiraPluginException e) {
+                    msgBox = new MessageBox(getShell(), SWT.ICON_ERROR | SWT.OK);
+                    msgBox.setMessage(BaseMessages.getString(PKG, e.getMessageKey()));
                 } catch (Exception e) {
-                    MessageBox msgBox = new MessageBox(getShell(), SWT.ICON_ERROR | SWT.OK);
-                    msgBox.setMessage(Messages.getString("Jira.Message.Fail"));
+                    msgBox = new MessageBox(getShell(), SWT.ICON_ERROR | SWT.OK);
+                    msgBox.setMessage(BaseMessages.getString(PKG, "Jira.Message.Fail"));
+                } finally {
                     msgBox.open();
                 }
             }

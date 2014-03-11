@@ -37,8 +37,9 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Represents connection to a JIRA instance. Also provides helper methods to obtain different information from the
- * remote JIRA instance
+ * Represents connection to a JIRA instance. Also provides helper methods to
+ * obtain different information from the remote JIRA instance
+ * 
  * @author nneikov 2013
  */
 public class JiraConnection {
@@ -163,11 +164,19 @@ public class JiraConnection {
         }
     }
 
-    public String get(String request) throws ClientProtocolException, IOException {
+    public String get(String request) throws ClientProtocolException, IOException, JiraPluginException {
         HttpGet httpget = new HttpGet(String.format("%s://%s:%d%s/rest/api/2%s", protocol, host, port, root, request));
         httpget.addHeader("Content-Type", "application/json");
         httpget.addHeader("Accept", "application/json");
         HttpResponse response = httpClient.execute(httpget, localcontext);
+        switch (response.getStatusLine().getStatusCode()) {
+        case 401:
+            throw new JiraPluginException("Jira.Error.Unauthorized");
+        case 200:
+            break;
+        default:
+            throw new JiraPluginException("Jira.Error.Unknown");
+        }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         response.getEntity().writeTo(baos);
         return new String(baos.toByteArray(), "utf-8");

@@ -110,6 +110,7 @@ public class JiraPluginDialog extends BaseStepDialog implements StepDialogInterf
         meta.setUsername(connectionTab.getUsernameField().getText());
         meta.setPassword(connectionTab.getPasswordField().getText());
         meta.setJql(jqlTab.getJqlField().getText());
+        meta.setOutputField(jqlTab.getOutputField().getText());
         dispose();
     }
 

@@ -4,11 +4,13 @@
  */
 package plugin.bg.sparebits.pdi.jira;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.row.RowMeta;
+import org.pentaho.di.core.row.RowMetaInterface;
 import org.pentaho.di.trans.Trans;
 import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.trans.step.BaseStep;
@@ -16,6 +18,8 @@ import org.pentaho.di.trans.step.StepDataInterface;
 import org.pentaho.di.trans.step.StepInterface;
 import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.di.trans.step.StepMetaInterface;
+
+import com.jayway.jsonpath.JsonPath;
 
 
 /**
@@ -25,6 +29,7 @@ public class JiraPlugin extends BaseStep implements StepInterface {
 
     private JiraPluginMeta meta;
     private JiraConnection connection;
+    private RowMetaInterface rowMeta;
 
     /**
      * @param stepMeta
@@ -43,22 +48,38 @@ public class JiraPlugin extends BaseStep implements StepInterface {
     public boolean init(StepMetaInterface smi, StepDataInterface sdi) {
         try {
             connection = new JiraConnection(new URL(meta.getConnectionUrl()), meta.getUsername(), meta.getPassword());
+            rowMeta = new RowMeta();
+            meta.getFields(rowMeta, getStepname(), null, getStepMeta(), getParentVariableSpace());
             return super.init(smi, sdi);
-        } catch (MalformedURLException e) {
-            getLogChannel().logError("Connection URL error", e);
+        } catch (Exception e) {
+            getLogChannel().logError("Failed to initialize", e);
             return false;
         }
     }
 
     @Override
     public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws KettleException {
-        getLogChannel().logBasic("processing JQL: " + meta.getJql());
-        connection.connect();
+        logBasic("processing JQL: " + meta.getJql());
         try {
-            String result = connection.get("/search?jql=" + URLEncoder.encode(meta.getJql(), "utf-8"));
-            getLogChannel().logBasic("result: " + result);
+            connection.connect();
+            int start = 0, max = 50;
+            String jql = getTransMeta().environmentSubstitute(meta.getJql());
+            String result = "";
+            while (true) {
+                result = connection.get(String.format("/search?jql=%s&startAt=%d&maxResults=%d",
+                        URLEncoder.encode(jql, "utf-8"), start, max));
+                List<Object> issues = JsonPath.read(result, "$.issues[*]");
+                if (issues.isEmpty()) {
+                    break;
+                }
+                putRow(rowMeta, new Object[] {
+                    result
+                });
+                start += max;
+            }
+            setOutputDone();
         } catch (Exception e) {
-            getLogChannel().logError("Failed to execute JQL", e);
+            logError("Failed to execute JQL", e);
             return false;
         }
         return super.processRow(smi, sdi);

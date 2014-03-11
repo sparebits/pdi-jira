@@ -13,8 +13,12 @@ import org.pentaho.di.core.annotations.Step;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.encryption.Encr;
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.exception.KettleStepException;
 import org.pentaho.di.core.exception.KettleXMLException;
 import org.pentaho.di.core.row.RowMetaInterface;
+import org.pentaho.di.core.row.ValueMeta;
+import org.pentaho.di.core.row.ValueMetaInterface;
+import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.core.xml.XMLHandler;
 import org.pentaho.di.repository.ObjectId;
 import org.pentaho.di.repository.Repository;
@@ -44,6 +48,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
     public static final String MAX_RESULTS = "maxResults";
     public static final String START_PAGE = "startPage";
     public static final String PAGES = "startPage";
+    public static final String OUTPUT_FIELD = "outputField";
 
     private String connectionUrl;
     private String username;
@@ -52,6 +57,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
     private int maxResults;
     private int startPage;
     private int pages;
+    private String outputField;
 
     public void check(List<CheckResultInterface> arg0, TransMeta arg1, StepMeta arg2, RowMetaInterface arg3,
             String[] arg4, String[] arg5, RowMetaInterface arg6) {
@@ -78,6 +84,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         if ((value = XMLHandler.getTagValue(stepnode, START_PAGE)) != null) {
             startPage = Integer.parseInt(value);
         }
+        outputField = XMLHandler.getTagValue(stepnode, OUTPUT_FIELD);
     }
 
     @Override
@@ -89,6 +96,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         sb.append(XMLHandler.addTagValue(JQL, jql));
         sb.append(XMLHandler.addTagValue(MAX_RESULTS, maxResults));
         sb.append(XMLHandler.addTagValue(START_PAGE, startPage));
+        sb.append(XMLHandler.addTagValue(OUTPUT_FIELD, outputField));
         return sb.toString();
     }
 
@@ -100,6 +108,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         jql = rep.getStepAttributeString(idStep, JQL);
         maxResults = (int) rep.getStepAttributeInteger(idStep, MAX_RESULTS);
         startPage = (int) rep.getStepAttributeInteger(idStep, START_PAGE);
+        outputField = rep.getStepAttributeString(idStep, OUTPUT_FIELD);
     }
 
     public void saveRep(Repository rep, ObjectId idTransformation, ObjectId idStep) throws KettleException {
@@ -109,6 +118,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         rep.saveStepAttribute(idTransformation, idStep, JQL, jql);
         rep.saveStepAttribute(idTransformation, idStep, MAX_RESULTS, maxResults);
         rep.saveStepAttribute(idTransformation, idStep, START_PAGE, startPage);
+        rep.saveStepAttribute(idTransformation, idStep, OUTPUT_FIELD, outputField);
     }
 
     public void setDefault() {
@@ -117,6 +127,13 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
     @Override
     public String getDialogClassName() {
         return JiraPluginDialog.class.getName();
+    }
+
+    @Override
+    public void getFields(RowMetaInterface inputRowMeta, String name, RowMetaInterface[] info, StepMeta nextStep,
+            VariableSpace space) throws KettleStepException {
+        super.getFields(inputRowMeta, name, info, nextStep, space);
+        inputRowMeta.addValueMeta(new ValueMeta(outputField, ValueMetaInterface.TYPE_STRING));
     }
 
     /**
@@ -189,6 +206,22 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
 
     public void setStartPage(int startPage) {
         this.startPage = startPage;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public String getOutputField() {
+        return outputField;
+    }
+
+    public void setOutputField(String outputField) {
+        this.outputField = outputField;
     }
 
 }

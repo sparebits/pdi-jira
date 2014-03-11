@@ -11,9 +11,12 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.pentaho.di.core.Const;
+import org.pentaho.di.core.variables.Variables;
 import org.pentaho.di.ui.core.PropsUI;
+import org.pentaho.di.ui.core.widget.TextVar;
 
 import plugin.bg.sparebits.pdi.jira.JiraPluginMeta;
 
@@ -26,8 +29,11 @@ public class JqlTab extends Composite {
     private PropsUI props = PropsUI.getInstance();
     private JiraPluginMeta meta;
 
-    private Text jqlField;
+    private TextVar jqlField;
+    private Text outputField;
+    @SuppressWarnings("unused")
     private Text maxResultsField;
+    @SuppressWarnings("unused")
     private Text startPageField;
 
     public JqlTab(Composite parent, JiraPluginMeta meta) {
@@ -41,12 +47,13 @@ public class JqlTab extends Composite {
         props.setLook(this);
 
         createJql(this);
+        createOutput(this, jqlField);
     }
 
     private void createJql(Composite parent) {
         Utils.createLabel(parent, null, "Jira.Label.JQL");
 
-        jqlField = new Text(parent, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
+        jqlField = new TextVar(Variables.getADefaultVariableSpace(), parent, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
         jqlField.setText(meta.getJql() != null ? meta.getJql() : "");
         props.setLook(jqlField);
 
@@ -62,8 +69,31 @@ public class JqlTab extends Composite {
         jqlField.setLayoutData(fd);
     }
 
-    public Text getJqlField() {
+    private void createOutput(Composite parent, Control top) {
+        Utils.createLabel(parent, top, "Jira.Label.Output");
+
+        outputField = new Text(parent, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
+        outputField.setText(meta.getOutputField() != null ? meta.getOutputField() : "result");
+        props.setLook(outputField);
+
+        outputField.addModifyListener(new ModifyListener() {
+            public void modifyText(ModifyEvent arg0) {
+                meta.setChanged();
+            }
+        });
+        FormData fd = new FormData();
+        fd.left = new FormAttachment(props.getMiddlePct(), 0);
+        fd.top = new FormAttachment(top, Const.MARGIN);
+        fd.right = new FormAttachment(100, -Const.MARGIN);
+        outputField.setLayoutData(fd);
+    }
+
+    public TextVar getJqlField() {
         return jqlField;
+    }
+
+    public Text getOutputField() {
+        return outputField;
     }
 
 }

@@ -1,0 +1,30 @@
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <includes>
+                <include>*:jar:*</include>
+            </includes>
+            <excludes>
+                <exclude>bg.sparebits.pdi:pdi-jira</exclude>
+                <exclude>org.slf4j:slf4j-api</exclude>
+                <exclude>org.slf4j:slf4j-log4j12</exclude>
+                </excludes>
+            <outputDirectory>lib</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+    <files>
+        <file>
+            <source>target/pdi-jira.jar</source>
+            <filtered>false</filtered>
+            <outputDirectory>/</outputDirectory>
+        </file>
+    </files>
+
+</assembly>

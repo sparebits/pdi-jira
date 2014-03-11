@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.pentaho.di.core.Const;
+import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.ui.core.PropsUI;
 
 
@@ -19,9 +20,11 @@ import org.pentaho.di.ui.core.PropsUI;
  */
 public class Utils {
 
+    private static Class<?> PKG = Utils.class;
+
     public static Label createLabel(Composite parent, Control up, String key) {
         Label l = new Label(parent, SWT.RIGHT);
-        l.setText(Messages.getString(key));
+        l.setText(BaseMessages.getString(PKG, key));
         FormData fd = new FormData();
         fd.top = new FormAttachment(up, Const.MARGIN);
         fd.left = new FormAttachment(0, 0);
