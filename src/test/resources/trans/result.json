@@ -1,0 +1,152 @@
+{
+    "expand":"names,schema",
+    "startAt":0,
+    "maxResults":50,
+    "total":1,
+    "issues":[
+        {
+            "expand":"editmeta,renderedFields,transitions,changelog,operations",
+            "id":"14404",
+            "self":"https://10.10.0.1:8443/jira/rest/api/2/issue/14404",
+            "key":"AUT-118",
+            "fields":{
+                "progress":{
+                    "progress":17760,
+                    "total":24060,
+                    "percent":73
+                },
+                "summary":"Пускане на примера под версия 2.2",
+                "issuetype":{
+                    "self":"https://10.10.0.1:8443/jira/rest/api/2/issuetype/3",
+                    "id":"3",
+                    "description":"A task that needs to be done.",
+                    "iconUrl":"https://10.10.0.1:8443/jira/images/icons/issuetypes/task.png",
+                    "name":"Task",
+                    "subtask":false
+                },
+                "votes":{
+                    "self":"https://10.10.0.1:8443/jira/rest/api/2/issue/AUT-118/votes",
+                    "votes":0,
+                    "hasVoted":false
+                },
+                "resolution":null,
+                "fixVersions":[
+                    {
+                        "self":"https://10.10.0.1:8443/jira/rest/api/2/version/12160",
+                        "id":"12160",
+                        "description":"Exporting to Google Docs",
+                        "name":"auto-calc 0.9",
+                        "archived":false,
+                        "released":false
+                    }
+                ],
+                "resolutiondate":null,
+                "timespent":17760,
+                "reporter":{
+                    "self":"https://10.10.0.1:8443/jira/rest/api/2/user?username=neyko",
+                    "name":"neyko",
+                    "emailAddress":"neikov@e-helix.com",
+                    "avatarUrls":{
+                        "16x16":"https://10.10.0.1:8443/jira/secure/useravatar?size=xsmall&avatarId=10172",
+                        "24x24":"https://10.10.0.1:8443/jira/secure/useravatar?size=small&avatarId=10172",
+                        "32x32":"https://10.10.0.1:8443/jira/secure/useravatar?size=medium&avatarId=10172",
+                        "48x48":"https://10.10.0.1:8443/jira/secure/useravatar?avatarId=10172"
+                    },
+                    "displayName":"Neyko Neykov",
+                    "active":true
+                },
+                "aggregatetimeoriginalestimate":7200,
+                "customfield_10350":"AUT-54",
+                "updated":"2013-10-29T08:03:55.000+0200",
+                "created":"2013-10-12T06:53:58.000+0300",
+                "description":null,
+                "priority":{
+                    "self":"https://10.10.0.1:8443/jira/rest/api/2/priority/3",
+                    "iconUrl":"https://10.10.0.1:8443/jira/images/icons/priorities/major.png",
+                    "name":"Major",
+                    "id":"3"
+                },
+                "duedate":null,
+                "customfield_10002":null,
+                "customfield_10003":null,
+                "customfield_10040":null,
+                "issuelinks":[
+                    
+                ],
+                "watches":{
+                    "self":"https://10.10.0.1:8443/jira/rest/api/2/issue/AUT-118/watchers",
+                    "watchCount":1,
+                    "isWatching":true
+                },
+                "customfield_10000":null,
+                "subtasks":[
+                    
+                ],
+                "status":{
+                    "self":"https://10.10.0.1:8443/jira/rest/api/2/status/3",
+                    "description":"This issue is being actively worked on at the moment by the assignee.",
+                    "iconUrl":"https://10.10.0.1:8443/jira/images/icons/statuses/inprogress.png",
+                    "name":"In Progress",
+                    "id":"3"
+                },
+                "labels":[
+                    
+                ],
+                "workratio":246,
+                "assignee":{
+                    "self":"https://10.10.0.1:8443/jira/rest/api/2/user?username=neyko",
+                    "name":"neyko",
+                    "emailAddress":"neikov@e-helix.com",
+                    "avatarUrls":{
+                        "16x16":"https://10.10.0.1:8443/jira/secure/useravatar?size=xsmall&avatarId=10172",
+                        "24x24":"https://10.10.0.1:8443/jira/secure/useravatar?size=small&avatarId=10172",
+                        "32x32":"https://10.10.0.1:8443/jira/secure/useravatar?size=medium&avatarId=10172",
+                        "48x48":"https://10.10.0.1:8443/jira/secure/useravatar?avatarId=10172"
+                    },
+                    "displayName":"Neyko Neykov",
+                    "active":true
+                },
+                "customfield_10250":null,
+                "aggregatetimeestimate":6300,
+                "project":{
+                    "self":"https://10.10.0.1:8443/jira/rest/api/2/project/AUT",
+                    "id":"10300",
+                    "key":"AUT",
+                    "name":"AutoCalc",
+                    "avatarUrls":{
+                        "16x16":"https://10.10.0.1:8443/jira/secure/projectavatar?size=xsmall&pid=10300&avatarId=10011",
+                        "24x24":"https://10.10.0.1:8443/jira/secure/projectavatar?size=small&pid=10300&avatarId=10011",
+                        "32x32":"https://10.10.0.1:8443/jira/secure/projectavatar?size=medium&pid=10300&avatarId=10011",
+                        "48x48":"https://10.10.0.1:8443/jira/secure/projectavatar?pid=10300&avatarId=10011"
+                    }
+                },
+                "versions":[
+                    
+                ],
+                "customfield_10151":[
+                    "com.atlassian.greenhopper.service.sprint.Sprint@5ab8e0b7[rapidViewId=2,state=CLOSED,name=Sprint 22,startDate=2013-10-12T06:55:38.890+03:00,endDate=2013-10-19T06:55:00.000+03:00,completeDate=2013-10-19T07:53:43.178+03:00,id=30]",
+                    "com.atlassian.greenhopper.service.sprint.Sprint@2a9706c[rapidViewId=2,state=CLOSED,name=Sprint 23,startDate=2013-10-19T08:02:15.777+03:00,endDate=2013-10-26T08:02:00.000+03:00,completeDate=2013-10-26T11:34:09.751+03:00,id=31]",
+                    "com.atlassian.greenhopper.service.sprint.Sprint@785fc1b3[rapidViewId=2,state=ACTIVE,name=Sprint 24,startDate=2013-10-27T06:35:32.729+02:00,endDate=2013-11-02T06:35:00.000+02:00,completeDate=<null>,id=32]"
+                ],
+                "customfield_10152":null,
+                "environment":null,
+                "timeestimate":6300,
+                "customfield_10052":null,
+                "customfield_10051":null,
+                "aggregateprogress":{
+                    "progress":17760,
+                    "total":24060,
+                    "percent":73
+                },
+                "lastViewed":"2013-10-22T06:08:19.893+0300",
+                "customfield_10050":null,
+                "components":[
+                    
+                ],
+                "timeoriginalestimate":7200,
+                "customfield_10150":"4",
+                "aggregatetimespent":17760
+            }
+        }
+    ]
+}

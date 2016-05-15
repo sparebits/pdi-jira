@@ -1,0 +1,3 @@
+key; $.issues[*].key; String
+summary; $.issues[*].fields.summary; String
+status_name; $.issues[*].fields.status.name; String

@@ -1,0 +1,157 @@
+{
+    "expand": "projectKeys",
+    "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/project/10600",
+    "id": "10600",
+    "key": "PJP",
+    "description": "PDI Jira Plugin is an add-on for Pentaho DI which you can use to connect any JIRA service and perform JSON data extraction over the results. JQL is used to obtain data from the JIRA remote service.",
+    "lead": {
+        "self": "https://soho.e-helix.com:8443/jira/rest/api/2/user?username=neyko",
+        "key": "neyko",
+        "name": "neyko",
+        "avatarUrls": {
+            "16x16": "https://soho.e-helix.com:8443/jira/secure/useravatar?size=xsmall&avatarId=10172",
+            "24x24": "https://soho.e-helix.com:8443/jira/secure/useravatar?size=small&avatarId=10172",
+            "32x32": "https://soho.e-helix.com:8443/jira/secure/useravatar?size=medium&avatarId=10172",
+            "48x48": "https://soho.e-helix.com:8443/jira/secure/useravatar?avatarId=10172"
+        },
+        "displayName": "Neyko Neykov",
+        "active": true
+    },
+    "components": [],
+    "issueTypes": [
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/1",
+            "id": "1",
+            "description": "A problem which impairs or prevents the functions of the product.",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/images/icons/issuetypes/bug.png",
+            "name": "Bug",
+            "subtask": false
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/2",
+            "id": "2",
+            "description": "A new feature of the product, which has yet to be developed.",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/images/icons/issuetypes/newfeature.png",
+            "name": "New Feature",
+            "subtask": false
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/3",
+            "id": "3",
+            "description": "A task that needs to be done.",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/images/icons/issuetypes/task.png",
+            "name": "Task",
+            "subtask": false
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/4",
+            "id": "4",
+            "description": "An improvement or enhancement to an existing feature or task.",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/images/icons/issuetypes/improvement.png",
+            "name": "Improvement",
+            "subtask": false
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/5",
+            "id": "5",
+            "description": "The sub-task of the issue",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/images/icons/issuetypes/subtask_alternate.png",
+            "name": "Sub-task",
+            "subtask": true
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/6",
+            "id": "6",
+            "description": "Issue reported as something that needs also support, not only fix",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/images/icons/issuetypes/epic.png",
+            "name": "Incident",
+            "subtask": false
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/10",
+            "id": "10",
+            "description": "",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/images/icons/issuetypes/subtask_alternate.png",
+            "name": "Sub-bug",
+            "subtask": true
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/7",
+            "id": "7",
+            "description": "A big user story that needs to be broken down.",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/download/resources/com.pyxis.greenhopper.jira:greenhopper-webactions/images/ico_epic.png",
+            "name": "Epic",
+            "subtask": false
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/8",
+            "id": "8",
+            "description": "An user story",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/download/resources/com.pyxis.greenhopper.jira:greenhopper-webactions/images/ico_story.png",
+            "name": "Story",
+            "subtask": false
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/9",
+            "id": "9",
+            "description": "A technical task.",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/download/resources/com.pyxis.greenhopper.jira:greenhopper-webactions/images/ico_task.png",
+            "name": "Technical task",
+            "subtask": true
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/issuetype/11",
+            "id": "11",
+            "description": "This Issue Type is used to create Zephyr Test within Jira.",
+            "iconUrl": "https://soho.e-helix.com:8443/jira/download/resources/com.thed.zephyr.je/images/icons/ico_zephyr_issuetype.png",
+            "name": "Test",
+            "subtask": false
+        }
+    ],
+    "url": "https://sourceforge.net/projects/pdijira",
+    "assigneeType": "PROJECT_LEAD",
+    "versions": [
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/version/12960",
+            "id": "12960",
+            "name": "0.5",
+            "archived": false,
+            "released": true,
+            "startDate": "2014-03-10",
+            "releaseDate": "2014-12-31",
+            "userStartDate": "10/Mar/14",
+            "userReleaseDate": "31/Dec/14",
+            "projectId": 10600
+        },
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/version/13760",
+            "id": "13760",
+            "description": "UI easy define",
+            "name": "0.6",
+            "archived": false,
+            "released": false,
+            "startDate": "2015-02-03",
+            "userStartDate": "03/Feb/15",
+            "projectId": 10600
+        }
+    ],
+    "name": "PDI Jira Plugin",
+    "roles": {
+        "Users": "https://soho.e-helix.com:8443/jira/rest/api/latest/project/10600/role/10000",
+        "Administrators": "https://soho.e-helix.com:8443/jira/rest/api/latest/project/10600/role/10002",
+        "CEO": "https://soho.e-helix.com:8443/jira/rest/api/latest/project/10600/role/10010",
+        "Developers": "https://soho.e-helix.com:8443/jira/rest/api/latest/project/10600/role/10001"
+    },
+    "avatarUrls": {
+        "16x16": "https://soho.e-helix.com:8443/jira/secure/projectavatar?size=xsmall&pid=10600&avatarId=10011",
+        "24x24": "https://soho.e-helix.com:8443/jira/secure/projectavatar?size=small&pid=10600&avatarId=10011",
+        "32x32": "https://soho.e-helix.com:8443/jira/secure/projectavatar?size=medium&pid=10600&avatarId=10011",
+        "48x48": "https://soho.e-helix.com:8443/jira/secure/projectavatar?pid=10600&avatarId=10011"
+    },
+    "projectCategory": {
+        "self": "https://soho.e-helix.com:8443/jira/rest/api/latest/projectCategory/10002",
+        "id": "10002",
+        "name": "G03 - Futures",
+        "description": ""
+    }
+}

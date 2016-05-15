@@ -1,0 +1,7 @@
+Check with following JQL:
+    status in ("In Progress") AND project=AUT
+    
+Developer Notes
+
+    * When adding to Eclipse run configuration class path, do not add Maven dependencies as this will brake down the 
+      Spoon execution

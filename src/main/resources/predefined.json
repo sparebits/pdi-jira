@@ -1,0 +1,68 @@
+{
+    "search": [{
+        "name":"key",
+        "pattern":"$.issues[*].key"
+    }, {
+        "name":"summary",
+        "pattern":"$.issues[*].fields.summary"
+    }, {
+        "name":"status",
+        "pattern":"$.issues[*].fields.status.name"
+    }],
+    
+    "issue": [{
+        "name":"key",
+        "pattern":"$.key"
+    }, {
+        "name":"id",
+        "pattern":"$.id"
+    }, {
+        "name":"summary",
+        "pattern":"$.fields.summary"
+    }],
+    
+    "issue-worklogs": [{
+        "name":"id",
+        "pattern":"$.worklogs[*].id"
+    }, {
+        "name":"author",
+        "pattern":"$.worklogs[*].author.name"
+    }, {
+        "name":"comment",
+        "pattern":"$.worklogs[*].comment"
+    }, {
+        "name":"started",
+        "pattern":"$.worklogs[*].started"
+    }, {
+        "name":"timeSpent",
+        "pattern":"$.worklogs[*].timeSpentSeconds"
+    }],
+    
+    "issue-comments": [{
+        "name":"id",
+        "pattern":"$.comments[*].id"
+    }, {
+        "name":"author",
+        "pattern":"$.comments[*].author.name"
+    }, {
+        "name":"comment",
+        "pattern":"$.comments[*].body"
+    }, {
+        "name":"created",
+        "pattern":"$.comments[*].created"
+    }],
+    
+    "project": [{
+        "name":"key",
+        "pattern":"$.key"
+    }, {
+        "name":"description",
+        "pattern":"$.description"
+    }, {
+        "name":"category",
+        "pattern":"$.projectCategory.name"
+    }, {
+        "name":"version",
+        "pattern":"$.versions[*].name"
+    }]
+}

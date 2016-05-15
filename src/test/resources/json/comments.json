@@ -1,0 +1,40 @@
+{
+    "startAt": 0,
+    "maxResults": 1,
+    "total": 1,
+    "comments": [
+        {
+            "self": "https://soho.e-helix.com:8443/jira/rest/api/2/issue/18103/comment/16875",
+            "id": "16875",
+            "author": {
+                "self": "https://soho.e-helix.com:8443/jira/rest/api/2/user?username=neyko",
+                "name": "neyko",
+                "emailAddress": "neikov@e-helix.com",
+                "avatarUrls": {
+                    "16x16": "https://soho.e-helix.com:8443/jira/secure/useravatar?size=xsmall&avatarId=10172",
+                    "24x24": "https://soho.e-helix.com:8443/jira/secure/useravatar?size=small&avatarId=10172",
+                    "32x32": "https://soho.e-helix.com:8443/jira/secure/useravatar?size=medium&avatarId=10172",
+                    "48x48": "https://soho.e-helix.com:8443/jira/secure/useravatar?avatarId=10172"
+                },
+                "displayName": "Neyko Neykov",
+                "active": true
+            },
+            "body": "This should be fixed for the login screen. Now data entering is available while processibng the loggin",
+            "updateAuthor": {
+                "self": "https://soho.e-helix.com:8443/jira/rest/api/2/user?username=neyko",
+                "name": "neyko",
+                "emailAddress": "neikov@e-helix.com",
+                "avatarUrls": {
+                    "16x16": "https://soho.e-helix.com:8443/jira/secure/useravatar?size=xsmall&avatarId=10172",
+                    "24x24": "https://soho.e-helix.com:8443/jira/secure/useravatar?size=small&avatarId=10172",
+                    "32x32": "https://soho.e-helix.com:8443/jira/secure/useravatar?size=medium&avatarId=10172",
+                    "48x48": "https://soho.e-helix.com:8443/jira/secure/useravatar?avatarId=10172"
+                },
+                "displayName": "Neyko Neykov",
+                "active": true
+            },
+            "created": "2015-02-19T17:44:39.000+0200",
+            "updated": "2015-02-19T17:44:39.000+0200"
+        }
+    ]
+}
