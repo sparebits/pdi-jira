@@ -4,6 +4,7 @@
  */
 package plugin.bg.sparebits.pdi.jira;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -29,16 +30,29 @@ import org.pentaho.di.trans.step.StepDataInterface;
 import org.pentaho.di.trans.step.StepInterface;
 import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.di.trans.step.StepMetaInterface;
+import org.pentaho.metastore.api.IMetaStore;
 import org.w3c.dom.Node;
 
 import plugin.bg.sparebits.pdi.jira.ui.JiraPluginDialog;
+import bg.sparebits.pdi.domain.Api;
+import bg.sparebits.pdi.domain.CustomApiMeta;
+import bg.sparebits.pdi.domain.IssueApiMeta;
+import bg.sparebits.pdi.domain.ProjectApiMeta;
+import bg.sparebits.pdi.domain.SearchApiMeta;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 
 /**
+ * API configurations are persisted in JSON format as this detaches this class
+ * from extending the API configurations Yo can add new fields to specific API
+ * configuration classes without changing anything here and it will work.
+ * 
  * @author Neyko Neykov, 2013
  */
 @Step(categoryDescription = "Input", image = "jira.png", name = "Jira Plugin", description = "Regular expression",
-        id = "JiraPlugin")
+        id = "JiraPlugin", documentationUrl = "http://pdijira.e-helix.com/help.html")
 public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
 
     public static final String CONNECTION_URL = "connectionUrl";
@@ -49,6 +63,15 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
     public static final String START_PAGE = "startPage";
     public static final String PAGES = "startPage";
     public static final String OUTPUT_FIELD = "outputField";
+    public static final String OUTPUT_FIELDS = "outputFields";
+    public static final String FIELD_NAME = "fieldName";
+    public static final String FIELD_TYPE = "fieldType";
+    public static final String FIELD_EXPRESSION = "fieldExpression";
+    public static final String API = "api";
+    public static final String API_CONFIGURATION = "apiConfiguration";
+    public static final String ISSUE = "issue";
+
+    private Gson gson = new Gson();
 
     private String connectionUrl;
     private String username;
@@ -58,6 +81,12 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
     private int startPage;
     private int pages;
     private String outputField;
+    private String[] fieldNames;
+    private int[] fieldTypes;
+    private String[] fieldExpressions;
+    private String api;
+    private String issue;
+    private String apiConfiguration;
 
     public void check(List<CheckResultInterface> arg0, TransMeta arg1, StepMeta arg2, RowMetaInterface arg3,
             String[] arg4, String[] arg5, RowMetaInterface arg6) {
@@ -85,6 +114,20 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
             startPage = Integer.parseInt(value);
         }
         outputField = XMLHandler.getTagValue(stepnode, OUTPUT_FIELD);
+        Node outputFields = XMLHandler.getSubNode(stepnode, OUTPUT_FIELDS);
+        int number = XMLHandler.countNodes(outputFields, OUTPUT_FIELD);
+        fieldNames = new String[number];
+        fieldTypes = new int[number];
+        fieldExpressions = new String[number];
+        for (int i = 0; i < number; i++) {
+            Node fieldNode = XMLHandler.getSubNodeByNr(outputFields, OUTPUT_FIELD, i);
+            fieldNames[i] = XMLHandler.getTagValue(fieldNode, FIELD_NAME);
+            fieldTypes[i] = Integer.parseInt(XMLHandler.getTagValue(fieldNode, FIELD_TYPE));
+            fieldExpressions[i] = XMLHandler.getTagValue(fieldNode, FIELD_EXPRESSION);
+        }
+        api = XMLHandler.getTagValue(stepnode, API);
+        apiConfiguration = XMLHandler.getTagValue(stepnode, API_CONFIGURATION);
+        issue = XMLHandler.getTagValue(stepnode, ISSUE);
     }
 
     @Override
@@ -97,6 +140,20 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         sb.append(XMLHandler.addTagValue(MAX_RESULTS, maxResults));
         sb.append(XMLHandler.addTagValue(START_PAGE, startPage));
         sb.append(XMLHandler.addTagValue(OUTPUT_FIELD, outputField));
+        sb.append(XMLHandler.openTag(OUTPUT_FIELDS));
+        if (fieldNames != null) {
+            for (int i = 0; i < fieldNames.length; i++) {
+                sb.append(XMLHandler.openTag(OUTPUT_FIELD));
+                sb.append(XMLHandler.addTagValue(FIELD_NAME, fieldNames[i]));
+                sb.append(XMLHandler.addTagValue(FIELD_TYPE, fieldTypes[i]));
+                sb.append(XMLHandler.addTagValue(FIELD_EXPRESSION, fieldExpressions[i]));
+                sb.append(XMLHandler.closeTag(OUTPUT_FIELD));
+            }
+        }
+        sb.append(XMLHandler.closeTag(OUTPUT_FIELDS));
+        sb.append(XMLHandler.addTagValue(API, api));
+        sb.append(XMLHandler.addTagValue(API_CONFIGURATION, apiConfiguration));
+        sb.append(XMLHandler.addTagValue(ISSUE, issue));
         return sb.toString();
     }
 
@@ -109,6 +166,21 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         maxResults = (int) rep.getStepAttributeInteger(idStep, MAX_RESULTS);
         startPage = (int) rep.getStepAttributeInteger(idStep, START_PAGE);
         outputField = rep.getStepAttributeString(idStep, OUTPUT_FIELD);
+        readOutputFields(rep, idStep);
+        api = rep.getStepAttributeString(idStep, API);
+        apiConfiguration = rep.getStepAttributeString(idStep, API_CONFIGURATION);
+        issue = rep.getStepAttributeString(idStep, ISSUE);
+    }
+
+    private void readOutputFields(Repository rep, ObjectId idStep) throws KettleException {
+        int number = rep.countNrStepAttributes(idStep, FIELD_NAME);
+        fieldNames = new String[number];
+        fieldExpressions = new String[number];
+        for (int i = 0; i < number; i++) {
+            fieldNames[i] = rep.getStepAttributeString(idStep, i, FIELD_NAME);
+            fieldTypes[i] = (int) rep.getStepAttributeInteger(idStep, i, FIELD_TYPE);
+            fieldExpressions[i] = rep.getStepAttributeString(idStep, i, FIELD_EXPRESSION);
+        }
     }
 
     public void saveRep(Repository rep, ObjectId idTransformation, ObjectId idStep) throws KettleException {
@@ -119,6 +191,16 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         rep.saveStepAttribute(idTransformation, idStep, MAX_RESULTS, maxResults);
         rep.saveStepAttribute(idTransformation, idStep, START_PAGE, startPage);
         rep.saveStepAttribute(idTransformation, idStep, OUTPUT_FIELD, outputField);
+        if (fieldNames != null) {
+            for (int i = 0; i < fieldNames.length; i++) {
+                rep.saveStepAttribute(idTransformation, idStep, i, FIELD_NAME, fieldNames[i]);
+                rep.saveStepAttribute(idTransformation, idStep, i, FIELD_TYPE, fieldTypes[i]);
+                rep.saveStepAttribute(idTransformation, idStep, i, FIELD_EXPRESSION, fieldExpressions[i]);
+            }
+        }
+        rep.saveStepAttribute(idTransformation, idStep, API, api);
+        rep.saveStepAttribute(idTransformation, idStep, API_CONFIGURATION, apiConfiguration);
+        rep.saveStepAttribute(idTransformation, idStep, ISSUE, issue);
     }
 
     public void setDefault() {
@@ -131,9 +213,17 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
 
     @Override
     public void getFields(RowMetaInterface inputRowMeta, String name, RowMetaInterface[] info, StepMeta nextStep,
-            VariableSpace space) throws KettleStepException {
-        super.getFields(inputRowMeta, name, info, nextStep, space);
-        inputRowMeta.addValueMeta(new ValueMeta(outputField, ValueMetaInterface.TYPE_STRING));
+            VariableSpace space, Repository repository, IMetaStore metaStore) throws KettleStepException {
+        super.getFields(inputRowMeta, name, info, nextStep, space, repository, metaStore);
+        if (fieldNames == null || fieldNames.length == 0) {
+            inputRowMeta.addValueMeta(new ValueMeta(outputField, ValueMetaInterface.TYPE_STRING,
+                    ValueMetaInterface.STORAGE_TYPE_NORMAL));
+        } else {
+            for (int i = 0; i < fieldNames.length; i++) {
+                inputRowMeta.addValueMeta(new ValueMeta(fieldNames[i], fieldTypes[i],
+                        ValueMetaInterface.STORAGE_TYPE_NORMAL));
+            }
+        }
     }
 
     /**
@@ -222,6 +312,111 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
 
     public void setOutputField(String outputField) {
         this.outputField = outputField;
+    }
+
+    /**
+     * @return the outputFields
+     */
+    public String[] getFieldNames() {
+        return fieldNames;
+    }
+
+    /**
+     * @param fieldNames the outputFields to set
+     */
+    public void setFieldNames(String[] fieldNames) {
+        this.fieldNames = fieldNames;
+    }
+
+    /**
+     * @return the outputExpressions
+     */
+    public String[] getFieldExpressions() {
+        return fieldExpressions;
+    }
+
+    /**
+     * @param fieldExpressions the outputExpressions to set
+     */
+    public void setFieldExpressions(String[] fieldExpressions) {
+        this.fieldExpressions = fieldExpressions;
+    }
+
+    /**
+     * @return the fieldTypes
+     */
+    public int[] getFieldTypes() {
+        return fieldTypes;
+    }
+
+    /**
+     * @param fieldTypes the fieldTypes to set
+     */
+    public void setFieldTypes(int[] fieldTypes) {
+        this.fieldTypes = fieldTypes;
+    }
+
+    /**
+     * @return the api
+     */
+    public String getApi() {
+        return api;
+    }
+
+    /**
+     * @param api the api to set
+     */
+    public void setApi(String api) {
+        this.api = api;
+    }
+
+    /**
+     * Retrieve the issue key when Issue API is used
+     * @return the issue
+     */
+    public String getIssue() {
+        return issue;
+    }
+
+    /**
+     * Set the issue key when the Issue API is used
+     * @param issue the issue to set
+     */
+    public void setIssue(String issue) {
+        this.issue = issue;
+    }
+
+    /**
+     * Retrieves the API configuration in JSON format
+     * @return the apiConfiguration
+     */
+    public String getApiConfiguration() {
+        return apiConfiguration;
+    }
+    public Serializable getApiConfiguration(Api api) {
+        switch (api) {
+        case search:
+            return gson.fromJson(apiConfiguration, new TypeToken<SearchApiMeta>() {
+            }.getType());
+        case issue:
+            return gson.fromJson(apiConfiguration, IssueApiMeta.class);
+        case project:
+            return gson.fromJson(apiConfiguration, ProjectApiMeta.class);
+        case custom:
+        default:
+            return gson.fromJson(apiConfiguration, CustomApiMeta.class);
+        }
+    }
+
+    /**
+     * Sets the configuration for the selected API in JSON format
+     * @param apiConfiguration the apiConfiguration to set
+     */
+    public void setApiConfiguration(String apiConfiguration) {
+        this.apiConfiguration = apiConfiguration;
+    }
+    public void setApiConfiguration(Serializable configuration) {
+        this.apiConfiguration = gson.toJson(configuration);
     }
 
 }

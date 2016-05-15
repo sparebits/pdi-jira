@@ -172,9 +172,9 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<connectionUrl>https:&#47;&#47;10.10.0.1:8443&#47;jira</connectionUrl>
-<username/>
-<password/>
+<connectionUrl>https:&#47;&#47;77.78.0.38:8443&#47;jira</connectionUrl>
+<username>neyko</username>
+<password>2be98afc86aa7f287a710ad7b8ec1f683</password>
 <jql>project=JP</jql>
 <maxResults>0</maxResults>
 <startPage>0</startPage>

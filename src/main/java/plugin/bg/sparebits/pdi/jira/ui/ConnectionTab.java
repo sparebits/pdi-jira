@@ -13,15 +13,16 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Text;
 import org.pentaho.di.core.Const;
+import org.pentaho.di.core.logging.LogChannel;
+import org.pentaho.di.core.variables.Variables;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.ui.core.PropsUI;
+import org.pentaho.di.ui.core.widget.TextVar;
 
 import plugin.bg.sparebits.pdi.jira.JiraConnection;
 import plugin.bg.sparebits.pdi.jira.JiraPluginException;
@@ -32,27 +33,21 @@ import plugin.bg.sparebits.pdi.jira.JiraPluginMeta;
  * General panel contains common controls used by all sections of the plug-in
  * @author Neyko Neykov, 2009
  */
-public class ConnectionTab extends Composite {
+public class ConnectionTab extends PdiJiraComposite {
 
     private static Class<?> PKG = ConnectionTab.class;
 
     private PropsUI props = PropsUI.getInstance();
     private JiraPluginMeta meta;
+    private LogChannel trace = new LogChannel("PDI Jira Plugin");
 
-    private Text urlField;
-    private Text usernameField;
-    private Text passwordField;
+    private TextVar urlField;
+    private TextVar usernameField;
+    private TextVar passwordField;
 
     public ConnectionTab(Composite parent, JiraPluginMeta meta) {
-        super(parent, SWT.NONE);
+        super(parent);
         this.meta = meta;
-
-        FormLayout fl = new FormLayout();
-        fl.marginWidth = Const.FORM_MARGIN;
-        fl.marginHeight = Const.FORM_MARGIN;
-        setLayout(fl);
-        props.setLook(this);
-
         createConnectionUrl(this);
         createUsername(this, urlField);
         createPassword(this, usernameField);
@@ -62,21 +57,21 @@ public class ConnectionTab extends Composite {
     /**
      * @return the urlField
      */
-    public Text getUrlField() {
+    public TextVar getUrlField() {
         return urlField;
     }
 
     /**
      * @return the usernameField
      */
-    public Text getUsernameField() {
+    public TextVar getUsernameField() {
         return usernameField;
     }
 
     /**
      * @return the passwordField
      */
-    public Text getPasswordField() {
+    public TextVar getPasswordField() {
         return passwordField;
     }
 
@@ -85,9 +80,9 @@ public class ConnectionTab extends Composite {
      * @param parent
      */
     private void createConnectionUrl(Composite parent) {
-        Utils.createLabel(parent, null, "Jira.Label.Connection");
+        createLabel(parent, null, "Jira.Label.Connection");
 
-        urlField = new Text(parent, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
+        urlField = new TextVar(Variables.getADefaultVariableSpace(), parent, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
         urlField.setText(meta.getConnectionUrl() != null ? meta.getConnectionUrl() : "");
         props.setLook(urlField);
 
@@ -109,9 +104,9 @@ public class ConnectionTab extends Composite {
      * @param parent
      */
     private void createUsername(Composite parent, Control up) {
-        Utils.createLabel(parent, up, "Jira.Label.Username");
+        createLabel(parent, up, "Jira.Label.Username");
 
-        usernameField = new Text(parent, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
+        usernameField = new TextVar(Variables.getADefaultVariableSpace(), parent, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
         usernameField.setText(meta.getUsername() != null ? meta.getUsername() : "");
         // usernameField.setEchoChar('*');
         props.setLook(usernameField);
@@ -133,9 +128,9 @@ public class ConnectionTab extends Composite {
      * @param up
      */
     private void createPassword(Composite parent, Control up) {
-        Utils.createLabel(parent, up, "Jira.Label.Password");
+        createLabel(parent, up, "Jira.Label.Password");
 
-        passwordField = new Text(parent, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
+        passwordField = new TextVar(Variables.getADefaultVariableSpace(), parent, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
         passwordField.setText(meta.getPassword() != null ? meta.getPassword() : "");
         passwordField.setEchoChar('*');
         props.setLook(passwordField);
@@ -162,18 +157,19 @@ public class ConnectionTab extends Composite {
             public void widgetSelected(SelectionEvent evt) {
                 MessageBox msgBox = null;
                 try {
-                    JiraConnection connection = new JiraConnection(new URL(urlField.getText()),
-                            usernameField.getText(), passwordField.getText());
+                    JiraConnection connection = new JiraConnection(new URL(urlField.getText()), usernameField.getText(),
+                            passwordField.getText());
                     connection.connect();
-                    connection.get("/application-properties");
+                    connection.get("auth", "/session");
                     msgBox = new MessageBox(getShell(), SWT.ICON_INFORMATION | SWT.OK);
                     msgBox.setMessage(BaseMessages.getString(PKG, "Jira.Message.Success"));
                 } catch (JiraPluginException e) {
                     msgBox = new MessageBox(getShell(), SWT.ICON_ERROR | SWT.OK);
                     msgBox.setMessage(BaseMessages.getString(PKG, e.getMessageKey()));
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     msgBox = new MessageBox(getShell(), SWT.ICON_ERROR | SWT.OK);
                     msgBox.setMessage(BaseMessages.getString(PKG, "Jira.Message.Fail"));
+                    trace.logError("Connection test failed");
                 } finally {
                     msgBox.open();
                 }

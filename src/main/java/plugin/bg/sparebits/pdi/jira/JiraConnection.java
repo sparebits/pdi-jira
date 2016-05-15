@@ -32,25 +32,24 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.pentaho.di.core.logging.LogChannel;
 
 
 /**
- * Represents connection to a JIRA instance. Also provides helper methods to
- * obtain different information from the remote JIRA instance
+ * Represents connection to a JIRA instance. Also provides helper methods to obtain different information from the
+ * remote JIRA instance
  * 
  * @author nneikov 2013
  */
 public class JiraConnection {
 
-    private Logger log = LoggerFactory.getLogger(getClass());
     private String protocol;
     private String host;
     private int port;
     private String root = "/";
     private String username;
     private String password;
+    private LogChannel trace = new LogChannel("PDI Jira Plugin");
 
     private DefaultHttpClient httpClient;
     private BasicHttpContext localcontext;
@@ -61,7 +60,7 @@ public class JiraConnection {
     public JiraConnection(URL url, String username, String password) {
         this.protocol = url.getProtocol();
         this.host = url.getHost();
-        this.port = url.getPort();
+        this.port = url.getPort() > 0 ? url.getPort() : 80;
         this.root = url.getPath();
         this.username = username;
         this.password = password;
@@ -128,7 +127,7 @@ public class JiraConnection {
      * Connects the JIRA instance using the specified username and password.
      */
     public void connect() {
-        log.debug(String.format("Connecting: %s://%s:%d%s .....", protocol, host, port, root));
+        trace.logDebug(String.format("Connecting: %s://%s:%d%s .....", protocol, host, port, root));
         httpClient = buildHttpClient();
         HttpHost targetHost = new HttpHost(host, port, protocol);
         // Create AuthCache instance
@@ -141,7 +140,7 @@ public class JiraConnection {
         localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);
         httpClient.getCredentialsProvider().setCredentials(new AuthScope(host, AuthScope.ANY_PORT),
                 new UsernamePasswordCredentials(username, password));
-        log.info(String.format("Connected: %s://%s:%d%s!", protocol, host, port, root));
+        trace.logBasic(String.format("Connected: %s://%s:%d%s!", protocol, host, port, root));
     }
 
     @SuppressWarnings("deprecation")
@@ -164,11 +163,13 @@ public class JiraConnection {
         }
     }
 
-    public String get(String request) throws ClientProtocolException, IOException, JiraPluginException {
-        HttpGet httpget = new HttpGet(String.format("%s://%s:%d%s/rest/api/2%s", protocol, host, port, root, request));
+    public String get(String api, String request) throws ClientProtocolException, IOException, JiraPluginException {
+        HttpGet httpget = new HttpGet(String.format("%s://%s:%d%s/rest/%s/latest%s", protocol, host, port, root, api,
+                request));
         httpget.addHeader("Content-Type", "application/json");
         httpget.addHeader("Accept", "application/json");
         HttpResponse response = httpClient.execute(httpget, localcontext);
+        trace.logBasic(String.format("Status: %d", response.getStatusLine().getStatusCode()));
         switch (response.getStatusLine().getStatusCode()) {
         case 401:
             throw new JiraPluginException("Jira.Error.Unauthorized");

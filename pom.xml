@@ -6,20 +6,16 @@
 
     <groupId>bg.sparebits.pdi</groupId>
     <artifactId>pdi-jira</artifactId>
-    <version>0.4.2</version>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <pdi.version>4.1.0.2</pdi.version>
+        <pdi.version>5.0.1-stable</pdi.version>
     </properties>
 
     <repositories>
         <repository>
             <id>pentaho-repo</id>
-            <url>http://repo.pentaho.org/artifactory/pentaho/</url>
-        </repository>
-        <repository>
-            <id>pentaho-third-party</id>
-            <url>http://repo.pentaho.org/artifactory/third-party/</url>
+            <url>http://repository.pentaho.org/artifactory/repo</url>
         </repository>
     </repositories>
 
@@ -40,41 +36,37 @@
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version>0.9.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>2.0.0</version>
         </dependency>
 
         <!-- Pentaho -->
         <!-- Following are dependencies that are provided in Pentaho DI version 4 -->
         <dependency>
-            <groupId>pentaho.kettle</groupId>
+            <groupId>pentaho-kettle</groupId>
             <artifactId>kettle-core</artifactId>
             <version>${pdi.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>pentaho.kettle</groupId>
+            <groupId>pentaho-kettle</groupId>
             <artifactId>kettle-engine</artifactId>
             <version>${pdi.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>pentaho.kettle</groupId>
+            <groupId>pentaho-kettle</groupId>
             <artifactId>kettle-ui-swt</artifactId>
             <version>${pdi.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- 
         <dependency>
-            <groupId>pentaho.kettle</groupId>
+            <groupId>pentaho-kettle</groupId>
             <artifactId>kettle-db</artifactId>
             <version>${pdi.version}</version>
             <scope>provided</scope>
         </dependency>
+         -->
         <dependency>
             <groupId>swt</groupId>
             <artifactId>swt-win32</artifactId>
@@ -85,7 +77,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.5</version>
-            <scope>provided</scope>
         </dependency>
         
         <!-- Testing -->
@@ -101,6 +92,14 @@
     <build>
         <finalName>pdi-jira</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>

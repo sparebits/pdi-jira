@@ -13,9 +13,7 @@
             </includes>
             <excludes>
                 <exclude>bg.sparebits.pdi:pdi-jira</exclude>
-                <exclude>org.slf4j:slf4j-api</exclude>
-                <exclude>org.slf4j:slf4j-log4j12</exclude>
-                </excludes>
+            </excludes>
             <outputDirectory>lib</outputDirectory>
         </dependencySet>
     </dependencySets>

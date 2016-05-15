@@ -39,7 +39,8 @@ public class JiraPluginDialog extends BaseStepDialog implements StepDialogInterf
     private JiraPluginMeta meta;
     private CTabFolder tabFolder;
     private ConnectionTab connectionTab;
-    private JqlTab jqlTab;
+    private ApiCallTab apiTab;
+    private FieldsTab fieldsTab;
 
     public JiraPluginDialog(Shell parent, Object baseStepMeta, TransMeta transMeta, String stepname) {
         super(parent, (BaseStepMeta) baseStepMeta, transMeta, stepname);
@@ -56,6 +57,8 @@ public class JiraPluginDialog extends BaseStepDialog implements StepDialogInterf
         shell.setLayout(formLayout);
         shell.setText("Jira Plugin");
         props.setLook(shell);
+        setShellImage(shell, meta);
+
         createButtons(shell);
         createStepName(shell);
         createTabFolder(shell);
@@ -109,8 +112,12 @@ public class JiraPluginDialog extends BaseStepDialog implements StepDialogInterf
         meta.setConnectionUrl(connectionTab.getUrlField().getText());
         meta.setUsername(connectionTab.getUsernameField().getText());
         meta.setPassword(connectionTab.getPasswordField().getText());
-        meta.setJql(jqlTab.getJqlField().getText());
-        meta.setOutputField(jqlTab.getOutputField().getText());
+        meta.setJql(apiTab.getJqlField().getText());
+        meta.setOutputField(apiTab.getOutputField().getText());
+        meta.setFieldNames(fieldsTab.getPredefinedFields());
+        meta.setFieldExpressions(fieldsTab.getPredefinedExpressions());
+        meta.setFieldTypes(fieldsTab.getPredefinedTypes());
+        // meta.setApi(apiTab.getApi());
         dispose();
     }
 
@@ -134,8 +141,14 @@ public class JiraPluginDialog extends BaseStepDialog implements StepDialogInterf
         ti.setControl(connectionTab = new ConnectionTab(tabFolder, meta));
 
         CTabItem jqlTabItem = new CTabItem(tabFolder, SWT.NONE);
-        jqlTabItem.setText("JQL");
-        jqlTabItem.setControl(jqlTab = new JqlTab(tabFolder, meta));
+        jqlTabItem.setText("API");
+        jqlTabItem.setControl(apiTab = new ApiCallTab(tabFolder, meta));
+
+        CTabItem fieldsTabItem = new CTabItem(tabFolder, SWT.NONE);
+        fieldsTabItem.setText("Output Fields");
+        fieldsTabItem.setControl(fieldsTab = new FieldsTab(tabFolder, meta));
+        apiTab.addPredefinedPathListener(fieldsTab);
+        apiTab.showSelectedApi(); // this will also notify listeners
 
         tabFolder.setSelection(ti);
     }
