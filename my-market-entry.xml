@@ -14,10 +14,10 @@
     <versions>
       <version>
         <branch>Stable</branch>
-        <version>0.4.3</version>
-        <name>0.4.3</name>
-        <package_url>http://sourceforge.net/projects/pdijira/files/pdi-jira-0.4.3.zip/download</package_url>
-        <min_parent_version>4.4</min_parent_version>
+        <version>1.1.0</version>
+        <name>1.1.0</name>
+        <package_url>http://sourceforge.net/projects/pdijira/files/pdi-jira-1.1.0.zip/download</package_url>
+        <min_parent_version>5.3</min_parent_version>
       </version>
     </versions>
   </market_entry>

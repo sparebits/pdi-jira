@@ -112,16 +112,15 @@
                 <executions>
                     <execution>
                         <id>assembly_package</id>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
                         <configuration>
+                            <finalName>${project.artifactId}</finalName>
                             <descriptors>
                                 <descriptor>src/main/assembly/bin.xml</descriptor>
                             </descriptors>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
                         </configuration>
                     </execution>
                 </executions>

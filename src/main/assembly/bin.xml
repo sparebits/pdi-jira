@@ -1,28 +1,22 @@
 <assembly>
     <id>bin</id>
     <formats>
-        <format>dir</format>
+        <format>zip</format>
     </formats>
-    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>${project.artifactId}.jar</include>
+            </includes>
+        </fileSet>
+    </fileSets>
     <dependencySets>
         <dependencySet>
-            <unpack>false</unpack>
+            <outputDirectory>lib/</outputDirectory>
+            <useProjectArtifact>false</useProjectArtifact>
             <scope>runtime</scope>
-            <includes>
-                <include>*:jar:*</include>
-            </includes>
-            <excludes>
-                <exclude>bg.sparebits.pdi:pdi-jira</exclude>
-            </excludes>
-            <outputDirectory>lib</outputDirectory>
         </dependencySet>
     </dependencySets>
-    <files>
-        <file>
-            <source>target/pdi-jira.jar</source>
-            <filtered>false</filtered>
-            <outputDirectory>/</outputDirectory>
-        </file>
-    </files>
-
 </assembly>
