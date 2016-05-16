@@ -56,13 +56,19 @@ import com.google.gson.reflect.TypeToken;
 
 /**
  * API configurations are persisted in JSON format as this detaches this class
- * from extending the API configurations Yo can add new fields to specific API
+ * from extending the API configurations. You can add new fields to specific API
  * configuration classes without changing anything here and it will work.
  * 
  * @author Neyko Neykov, 2013
  */
-@Step(categoryDescription = "Input", image = "jira.png", name = "Jira Plugin", description = "Regular expression",
-        id = "JiraPlugin", documentationUrl = "http://pdijira.e-helix.com/help.html")
+@Step(
+    id = "JiraPlugin",
+    i18nPackageName = "plugin.bg.sparebits.pdi.jira",
+    name = "JIRAInput.Name",
+    description = "JIRAInput.Description",
+    categoryDescription = "i18n:org.pentaho.di.trans.step:BaseStep.Category.Input",
+    image = "jira.png",
+    documentationUrl = "http://pdijira.e-helix.com/help.html")
 public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
 
     public static final String CONNECTION_URL = "connectionUrl";
