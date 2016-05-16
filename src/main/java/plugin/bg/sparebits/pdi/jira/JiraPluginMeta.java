@@ -1,15 +1,25 @@
-/*
- * JiraPluginMeta.java
- * Created on 14.09.2013 15:39:40
- */
+/*! ***************************************************************************
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************/
+
 package plugin.bg.sparebits.pdi.jira;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import org.pentaho.di.core.CheckResultInterface;
-import org.pentaho.di.core.Counter;
 import org.pentaho.di.core.annotations.Step;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.encryption.Encr;
@@ -101,7 +111,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         return new JiraPluginData();
     }
 
-    public void loadXML(Node stepnode, List<DatabaseMeta> arg1, Map<String, Counter> arg2) throws KettleXMLException {
+    public void loadXML(Node stepnode, List<DatabaseMeta> databases, IMetaStore metaStore) throws KettleXMLException {
         connectionUrl = XMLHandler.getTagValue(stepnode, CONNECTION_URL);
         username = XMLHandler.getTagValue(stepnode, USERNAME);
         password = Encr.decryptPassword(XMLHandler.getTagValue(stepnode, PASSWORD));
@@ -157,7 +167,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         return sb.toString();
     }
 
-    public void readRep(Repository rep, ObjectId idStep, List<DatabaseMeta> arg2, Map<String, Counter> arg3)
+    public void readRep(Repository rep, IMetaStore metaStore, ObjectId idStep, List<DatabaseMeta> databases)
             throws KettleException {
         connectionUrl = rep.getStepAttributeString(idStep, CONNECTION_URL);
         username = rep.getStepAttributeString(idStep, USERNAME);
@@ -183,7 +193,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         }
     }
 
-    public void saveRep(Repository rep, ObjectId idTransformation, ObjectId idStep) throws KettleException {
+    public void saveRep(Repository rep, IMetaStore metaStore, ObjectId idTransformation, ObjectId idStep) throws KettleException {
         rep.saveStepAttribute(idTransformation, idStep, CONNECTION_URL, connectionUrl);
         rep.saveStepAttribute(idTransformation, idStep, USERNAME, username);
         rep.saveStepAttribute(idTransformation, idStep, PASSWORD, Encr.encryptPassword(password));
