@@ -1,22 +1,22 @@
 <assembly>
-    <id>bin</id>
+    <id>${project.version}</id>
     <formats>
         <format>zip</format>
     </formats>
-    <fileSets>
-        <fileSet>
-            <directory>${project.build.directory}</directory>
-            <outputDirectory>/</outputDirectory>
-            <includes>
-                <include>${project.artifactId}.jar</include>
-            </includes>
-        </fileSet>
-    </fileSets>
     <dependencySets>
         <dependencySet>
             <outputDirectory>lib/</outputDirectory>
-            <useProjectArtifact>false</useProjectArtifact>
             <scope>runtime</scope>
+            <excludes>
+                <exclude>bg.sparebits.pdi:pdi-jira</exclude>
+            </excludes>
         </dependencySet>
     </dependencySets>
+    <files>
+        <file>
+            <source>${project.build.directory}/${artifact.artifactId}-${artifact.version}.jar</source>
+            <filtered>false</filtered>
+            <outputDirectory>/</outputDirectory>
+        </file>
+    </files>
 </assembly>
