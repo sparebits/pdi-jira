@@ -31,6 +31,11 @@ import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.util.EnvUtil;
 import org.pentaho.di.trans.steps.loadsave.LoadSaveTester;
+import org.pentaho.di.trans.steps.loadsave.validator.ArrayLoadSaveValidator;
+import org.pentaho.di.trans.steps.loadsave.validator.FieldLoadSaveValidator;
+import org.pentaho.di.trans.steps.loadsave.validator.IntLoadSaveValidator;
+import org.pentaho.di.trans.steps.loadsave.validator.PrimitiveIntArrayLoadSaveValidator;
+import org.pentaho.di.trans.steps.loadsave.validator.StringLoadSaveValidator;
 
 import bg.sparebits.pdi.domain.Api;
 import bg.sparebits.pdi.domain.SearchApiMeta;
@@ -60,12 +65,30 @@ public class JiraPluginMetaTest {
 
     @Test
     public void testLoadSave() throws KettleException {
-        List<String> attributes = Arrays.asList( new String[] { "connectionUrl", "username", "password", "jql",
-            "maxResults", "startPage", "outputField" } );
+        List<String> attributes = Arrays.asList( new String[] { "ConnectionUrl", "Username", "Password", "Jql",
+          "MaxResults", "StartPage", "OutputField", "FieldNames", "FieldTypes", "FieldExpressions", "Api",
+          "ApiConfiguration", "Issue" } );
         Map<String, String> customGetters = new HashMap<String, String>();
         Map<String, String> customSetters = new HashMap<String, String>();
 
-        LoadSaveTester tester = new LoadSaveTester( JiraPluginMeta.class, attributes, customGetters, customSetters );
+        Map<String, FieldLoadSaveValidator<?>> typeValidators = new HashMap<String, FieldLoadSaveValidator<?>>();
+        Map<String, FieldLoadSaveValidator<?>> fieldValidators = new HashMap<String, FieldLoadSaveValidator<?>>();
+        fieldValidators.put( "ConnectionUrl", new StringLoadSaveValidator() );
+        fieldValidators.put( "Username", new StringLoadSaveValidator() );
+        fieldValidators.put( "Password", new StringLoadSaveValidator() );
+        fieldValidators.put( "Jql", new StringLoadSaveValidator() );
+        fieldValidators.put( "MaxResults", new IntLoadSaveValidator() );
+        fieldValidators.put( "StartPage", new IntLoadSaveValidator() );
+        fieldValidators.put( "OutputField", new StringLoadSaveValidator() );
+        fieldValidators.put( "FieldNames", new ArrayLoadSaveValidator<String>( new StringLoadSaveValidator(), 50 ) );
+        fieldValidators.put( "FieldTypes", new PrimitiveIntArrayLoadSaveValidator( new IntLoadSaveValidator(), 50 ) );
+        fieldValidators.put( "FieldExpressions", new ArrayLoadSaveValidator<String>( new StringLoadSaveValidator(), 50 ) );
+        fieldValidators.put( "Api", new StringLoadSaveValidator() );
+        fieldValidators.put( "ApiConfiguration", new StringLoadSaveValidator() );
+        fieldValidators.put( "Issue", new StringLoadSaveValidator() );
+
+        LoadSaveTester tester = new LoadSaveTester( JiraPluginMeta.class, attributes, customGetters, customSetters,
+          fieldValidators, typeValidators );
 
         tester.testXmlRoundTrip();
         tester.testRepoRoundTrip();

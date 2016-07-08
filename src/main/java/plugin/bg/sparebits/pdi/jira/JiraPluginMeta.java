@@ -43,22 +43,22 @@ import org.pentaho.di.trans.step.StepMetaInterface;
 import org.pentaho.metastore.api.IMetaStore;
 import org.w3c.dom.Node;
 
-import plugin.bg.sparebits.pdi.jira.ui.JiraPluginDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import bg.sparebits.pdi.domain.Api;
 import bg.sparebits.pdi.domain.CustomApiMeta;
 import bg.sparebits.pdi.domain.IssueApiMeta;
 import bg.sparebits.pdi.domain.ProjectApiMeta;
 import bg.sparebits.pdi.domain.SearchApiMeta;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import plugin.bg.sparebits.pdi.jira.ui.JiraPluginDialog;
 
 
 /**
  * API configurations are persisted in JSON format as this detaches this class
  * from extending the API configurations. You can add new fields to specific API
  * configuration classes without changing anything here and it will work.
- * 
+ *
  * @author Neyko Neykov, 2013
  */
 @Step(
@@ -104,19 +104,23 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
     private String issue;
     private String apiConfiguration;
 
+    @Override
     public void check(List<CheckResultInterface> arg0, TransMeta arg1, StepMeta arg2, RowMetaInterface arg3,
             String[] arg4, String[] arg5, RowMetaInterface arg6) {
     }
 
+    @Override
     public StepInterface getStep(StepMeta stepMeta, StepDataInterface stepDataInterface, int copyNr,
             TransMeta transMeta, Trans trans) {
         return new JiraPlugin(stepMeta, stepDataInterface, copyNr, transMeta, trans);
     }
 
+    @Override
     public StepDataInterface getStepData() {
         return new JiraPluginData();
     }
 
+    @Override
     public void loadXML(Node stepnode, List<DatabaseMeta> databases, IMetaStore metaStore) throws KettleXMLException {
         connectionUrl = XMLHandler.getTagValue(stepnode, CONNECTION_URL);
         username = XMLHandler.getTagValue(stepnode, USERNAME);
@@ -173,6 +177,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         return sb.toString();
     }
 
+    @Override
     public void readRep(Repository rep, IMetaStore metaStore, ObjectId idStep, List<DatabaseMeta> databases)
             throws KettleException {
         connectionUrl = rep.getStepAttributeString(idStep, CONNECTION_URL);
@@ -191,6 +196,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
     private void readOutputFields(Repository rep, ObjectId idStep) throws KettleException {
         int number = rep.countNrStepAttributes(idStep, FIELD_NAME);
         fieldNames = new String[number];
+        fieldTypes = new int[number];
         fieldExpressions = new String[number];
         for (int i = 0; i < number; i++) {
             fieldNames[i] = rep.getStepAttributeString(idStep, i, FIELD_NAME);
@@ -199,6 +205,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         }
     }
 
+    @Override
     public void saveRep(Repository rep, IMetaStore metaStore, ObjectId idTransformation, ObjectId idStep) throws KettleException {
         rep.saveStepAttribute(idTransformation, idStep, CONNECTION_URL, connectionUrl);
         rep.saveStepAttribute(idTransformation, idStep, USERNAME, username);
@@ -219,6 +226,7 @@ public class JiraPluginMeta extends BaseStepMeta implements StepMetaInterface {
         rep.saveStepAttribute(idTransformation, idStep, ISSUE, issue);
     }
 
+    @Override
     public void setDefault() {
     }
 
