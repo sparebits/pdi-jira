@@ -15,7 +15,7 @@
     <repositories>
         <repository>
             <id>pentaho-repo</id>
-            <url>http://repository.pentaho.org/artifactory/repo</url>
+            <url>https://nexus.pentaho.org/content/groups/omni/</url>
         </repository>
     </repositories>
 
