@@ -14,7 +14,7 @@
     </dependencySets>
     <files>
         <file>
-            <source>${project.build.directory}/${artifact.artifactId}-${artifact.version}.jar</source>
+            <source>${project.build.directory}/${artifact.artifactId}.jar</source>
             <filtered>false</filtered>
             <outputDirectory>/</outputDirectory>
         </file>
